@@ -20,6 +20,7 @@
   "homepage": "https://github.com/devIbrahim/SalePuppet-Flash-Sale-Extension#readme",
   "dependencies": {
     "dotenv": "^8.2.0",
+    "express": "^4.17.1",
     "puppeteer": "^4.0.0",
     "puppeteer-select": "^1.0.3"
   }
