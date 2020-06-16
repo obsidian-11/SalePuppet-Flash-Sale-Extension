@@ -1,67 +1,57 @@
 "use strict";
 
 const puppeteer = require("puppeteer");
-const select = require("puppeteer-select");
 require("dotenv").config();
 
-const email = process.env.EMAIL;
-const password = process.env.PASSWORD;
-
-(async () => {
+async function oneWindow(email, pass) {
   let browser;
   try {
+    // new broswer window and page
     browser = await puppeteer.launch({ headless: false });
     let page = await browser.newPage();
+
     await page.goto("http://amazon.in");
+
+    // click on Sign-In button
     await page.click("#a-autoid-0-announce");
-    // Converting a 'drag' step has to be done manually at this time
-    // Converting a 'drag' step has to be done manually at this time
+
+    // enter email and hit enter
     await page.waitForSelector("#ap_email");
     await page.click("#ap_email");
     await page.type("#ap_email", email);
     await sendSpecialCharacter(page, "#ap_email", "Enter");
-    // Converting a 'drag' step has to be done manually at this time
+
+    // enter password and hit enter
     await page.waitForSelector("#ap_password");
-    await page.type("#ap_password", password);
+    await page.type("#ap_password", pass);
     await sendSpecialCharacter(page, "#ap_password", "Enter");
-    await page.waitForSelector("#twotabsearchtextbox");
-    await page.click("#twotabsearchtextbox");
-    await page.type(
-      "#twotabsearchtextbox",
-      "Data Structures and Algorithms Made Easy: Data Structures and Algorithmic Puzzles"
-    );
-    await sendSpecialCharacter(page, "#twotabsearchtextbox", "Enter");
-    await page.waitForNavigation();
-    console.log("SEARCH-RESULTS PAGE LOADED");
-    // await page.click(
-    //   '[href="/Data-Structures-Algorithms-Made-Easy/dp/819324527X/ref=sr_1_2?dchild=1&keywords=Data+Structures+and+Algorithms+Made+Easy%3A+Data+Structures+and+Algorithmic+Puzzles&qid=1592292386&sr=8-2"]'
-    // );
-    // const product = await select(page).getElement(
-    //   "span.a-size-medium:contains(Data Structures and Algorithms Made Easy: Data Structures and Algorithmic Puzzles)"
-    // );
-    // await product.click();
-    const pageTarget = page.target();
-    await page.click("[data-asin='819324527X'] .a-size-medium");
-    const newTarget = await browser.waitForTarget(target => target.opener() === pageTarget);
-    page = await newTarget.page();
-    // const newTarget = await browser.waitForTarget(
-    //   (target) => target.opener() === page
-    // );
-    // //check that you opened this page, rather than just checking the url
-    // const newPage = await newTarget.page(); //get the page object
-    // //wait till page is loaded
-    // await newPage.waitForNavigation();
-    //await page.waitForSelector("#add-to-cart-button");
-    // await page.click("#add-to-cart-button");
 
-    // const button = await select(page).getElement(
-    //   "span.a-button-text:contains(Add to Cart)"
+    // // click on the searchbox and type the product name, then hit enter
+    // await page.waitForSelector("#twotabsearchtextbox");
+    // await page.click("#twotabsearchtextbox");
+    // await page.type(
+    //   "#twotabsearchtextbox",
+    //   "Data Structures and Algorithms Made Easy: Data Structures and Algorithmic Puzzles"
     // );
-    // await button.click();
+    // await sendSpecialCharacter(page, "#twotabsearchtextbox", "Enter");
 
-    //await scrollToElement(page, "#add-to-cart-button");
+    // // wait for the products to load and click the desired product link
     // await page.waitForNavigation();
-    // page = browser.pages[browser.pages.length - 1];
+    // const pageTarget = page.target();
+    // await page.click("[data-asin='819324527X'] .a-size-medium");
+
+    // // wait for new page/tab and set page variable to the new page
+    // const newTarget = await browser.waitForTarget(
+    //   (target) => target.opener() === pageTarget
+    // );
+    // page = await newTarget.page();
+
+    await page.waitForNavigation();
+    page.goto(
+      "https://www.amazon.in/Test-Exclusive-646/dp/B07HGJKDRR/ref=sr_1_3?dchild=1&keywords=galaxy+m40&qid=1592337590&s=electronics&sr=1-3"
+    );
+
+    // click the add-to-cart button
     await page.waitForSelector("#add-to-cart-button");
     await page.click("#add-to-cart-button");
   } finally {
@@ -69,10 +59,18 @@ const password = process.env.PASSWORD;
     //   await browser.close();
     // }
   }
-})();
+}
 
-// move to utils.js
+// get creds from .env file and split the EMAIL and PASSWORD using ','
+let emailsArr = process.env.EMAIL.split(",");
+let passArray = process.env.PASSWORD.split(",");
 
+// call the main function in a loop where no. of iterations = no. of accounts
+for (let i = 0; i < emailsArr.length; i++) {
+  oneWindow(emailsArr[i], passArray[i]);
+}
+
+// additional functions     ---------------------------------------------------
 async function scrollTo(page, x, y) {
   await page.evaluate(
     (x, y) => {
