@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/devIbrahim/SalePuppet-Flash-Sale-Extension#readme",
   "dependencies": {
-    "puppeteer": "^4.0.0"
+    "puppeteer": "^4.0.0",
+    "puppeteer-select": "^1.0.3"
   }
 }

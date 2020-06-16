@@ -1,7 +1,9 @@
 "use strict";
 
 const puppeteer = require("puppeteer");
-const email = "fakeemail";
+const select = require("puppeteer-select");
+
+const email = "fakemail";
 const password = "fakepass";
 
 (async () => {
@@ -23,18 +25,39 @@ const password = "fakepass";
     await sendSpecialCharacter(page, "#ap_password", "Enter");
     await page.waitForSelector("#twotabsearchtextbox");
     await page.click("#twotabsearchtextbox");
-    await page.type("#twotabsearchtextbox", "data structures and algorithms");
+    await page.type(
+      "#twotabsearchtextbox",
+      "Data Structures and Algorithms Made Easy: Data Structures and Algorithmic Puzzles"
+    );
     await sendSpecialCharacter(page, "#twotabsearchtextbox", "Enter");
-    await page.waitForSelector(".sg-col-inner");
-    await page
-      .$x(
-        "/html/body/div[1]/div[2]/div[1]/div[2]/div/span[3]/div[2]/div[4]/div/span/span/div/span[2]/div/div/div[2]/div[1]/div/div/span/a"
-      )[0]
-      .click();
+    await page.waitForNavigation();
+    console.log("SEARCH-RESULTS PAGE LOADED");
+    // await page.click(
+    //   '[href="/Data-Structures-Algorithms-Made-Easy/dp/819324527X/ref=sr_1_2?dchild=1&keywords=Data+Structures+and+Algorithms+Made+Easy%3A+Data+Structures+and+Algorithmic+Puzzles&qid=1592292386&sr=8-2"]'
+    // );
+    // const product = await select(page).getElement(
+    //   "span.a-size-medium:contains(Data Structures and Algorithms Made Easy: Data Structures and Algorithmic Puzzles)"
+    // );
+    // await product.click();
+    await page.click("[data-asin='819324527X'] .a-size-medium");
+    // const newTarget = await browser.waitForTarget(
+    //   (target) => target.opener() === page
+    // );
+    // //check that you opened this page, rather than just checking the url
+    // const newPage = await newTarget.page(); //get the page object
+    // //wait till page is loaded
+    // await newPage.waitForNavigation();
+    //await page.waitForSelector("#add-to-cart-button");
+    // await page.click("#add-to-cart-button");
 
-    //Converting a 'wheel' step has to be done manually at this time
-    await page.waitForSelector("#add-to-cart-button");
-    await scrollToElement(page, "#add-to-cart-button");
+    // const button = await select(page).getElement(
+    //   "span.a-button-text:contains(Add to Cart)"
+    // );
+    // await button.click();
+
+    //await scrollToElement(page, "#add-to-cart-button");
+    // await page.waitForNavigation();
+    // await page.waitForSelector("#add-to-cart-button");
     await page.click("#add-to-cart-button");
   } finally {
     // if (browser) {
