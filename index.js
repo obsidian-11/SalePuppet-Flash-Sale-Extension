@@ -2,15 +2,16 @@
 
 const puppeteer = require("puppeteer");
 const select = require("puppeteer-select");
+require("dotenv").config();
 
-const email = "fakemail";
-const password = "fakepass";
+const email = process.env.EMAIL;
+const password = process.env.PASSWORD;
 
 (async () => {
   let browser;
   try {
     browser = await puppeteer.launch({ headless: false });
-    const page = await browser.newPage();
+    let page = await browser.newPage();
     await page.goto("http://amazon.in");
     await page.click("#a-autoid-0-announce");
     // Converting a 'drag' step has to be done manually at this time
@@ -39,7 +40,10 @@ const password = "fakepass";
     //   "span.a-size-medium:contains(Data Structures and Algorithms Made Easy: Data Structures and Algorithmic Puzzles)"
     // );
     // await product.click();
+    const pageTarget = page.target();
     await page.click("[data-asin='819324527X'] .a-size-medium");
+    const newTarget = await browser.waitForTarget(target => target.opener() === pageTarget);
+    page = await newTarget.page();
     // const newTarget = await browser.waitForTarget(
     //   (target) => target.opener() === page
     // );
@@ -57,7 +61,8 @@ const password = "fakepass";
 
     //await scrollToElement(page, "#add-to-cart-button");
     // await page.waitForNavigation();
-    // await page.waitForSelector("#add-to-cart-button");
+    // page = browser.pages[browser.pages.length - 1];
+    await page.waitForSelector("#add-to-cart-button");
     await page.click("#add-to-cart-button");
   } finally {
     // if (browser) {
