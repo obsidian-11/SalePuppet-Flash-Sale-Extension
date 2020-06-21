@@ -36,7 +36,7 @@ app.get("/book-now", function (req, res) {
         await page.waitForNavigation();
         // go to the product page
         page.goto(
-          "https://www.amazon.in/Test-Exclusive-646/dp/B07HGJKDRR/ref=sr_1_3?dchild=1&keywords=galaxy+m40&qid=1592337590&s=electronics&sr=1-3"
+          process.env.BUYLINK
         );
 
         // click the add-to-cart button
