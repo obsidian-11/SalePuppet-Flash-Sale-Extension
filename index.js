@@ -8,7 +8,7 @@ app.listen(9000, () => {
   console.log("Server running on port 9000");
 });
 
-app.get("/book-now", function (req, res) {
+app.get("/book-now-amazon", function (req, res) {
   try {
     async function oneWindow(email, pass) {
       let browser;
@@ -95,3 +95,88 @@ app.get("/book-now", function (req, res) {
 // app.get("/book-now", function (req, res) {
 //   res.send("Working.!");
 // });
+
+
+app.get("/book-now-flipkart", function (req, res) {
+  try {
+    async function oneWindow(email, pass) {
+      let browser;
+      try {
+        // new broswer window and page
+        browser = await puppeteer.launch({ headless: false });
+        let page = await browser.newPage();
+
+        await page.goto("https://www.flipkart.com/");
+
+        // click on Sign-In button
+        await page.click("._3Ep39l");
+
+        // enter email and hit enter
+        await page.waitForSelector("._39M2dM.JB4AMj");
+        await page.click("._2zrpKA._2rqcw-._2VUCMV._1dBPDZ");
+        await page.type("._2zrpKA._2rqcw-._2VUCMV._1dBPDZ", email);
+        await sendSpecialCharacter(page, "._39M2dM.JB4AMj", "Enter");
+
+        // enter password and hit enter
+        await page.waitForSelector("._2zrpKA._2rqcw-._3v41xv._1dBPDZ");
+        await page.type("#ap_password", pass);
+        await sendSpecialCharacter(page, "_2zrpKA._2rqcw-._2VUCMV._1dBPDZ", "Enter");
+
+        await page.waitForNavigation();
+        // go to the product page
+        page.goto(
+          process.env.BUYLINK_F
+        );
+
+        // click the add-to-cart button
+        await page.waitForSelector("._2AkmmA._2Npkh4._2MWPVK");
+        await page.click("._2AkmmA._2Npkh4._2MWPVK");
+      } catch (err) {
+        console.log(err);
+      } finally {
+        // if (browser) {
+        //   await browser.close();
+        // }
+      }
+    }
+
+    // get creds from .env file and split the EMAIL and PASSWORD using ','
+    let emailsArr = process.env.EMAIL_F.split(",");
+    let passArray = process.env.PASSWORD_F.split(",");
+
+    // call the main function in a loop where no. of iterations = no. of accounts
+    for (let i = 0; i < emailsArr.length; i++) {
+      oneWindow(emailsArr[i], passArray[i]);
+    }
+
+    // additional functions     ---------------------------------------------------
+    async function scrollTo(page, x, y) {
+      await page.evaluate(
+        (x, y) => {
+          window.scroll(x, y);
+        },
+        x,
+        y
+      );
+    }
+
+    async function sendSpecialCharacter(page, selector, key) {
+      const elementHandle = await page.$(selector);
+      await elementHandle.press(key);
+    }
+
+    async function scrollToElement(page, selector) {
+      await page.evaluate((selector) => {
+        const element = document.querySelector(selector);
+        element.scrollIntoView({
+          block: "center",
+          inline: "nearest",
+          behavior: "instant",
+        });
+      }, selector);
+    }
+    res.send("Everythin is fine...");
+  } catch (err) {
+    console.log(err);
+  }
+});
