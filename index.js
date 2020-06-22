@@ -109,18 +109,18 @@ app.get("/book-now-flipkart", function (req, res) {
         await page.goto("https://www.flipkart.com/");
 
         // click on Sign-In button
-        await page.click("._3Ep39l");
+        //await page.click("._3Ep39l");
 
         // enter email and hit enter
         await page.waitForSelector("._39M2dM.JB4AMj");
-        await page.click("._2zrpKA._2rqcw-._2VUCMV._1dBPDZ");
-        await page.type("._2zrpKA._2rqcw-._2VUCMV._1dBPDZ", email);
-        await sendSpecialCharacter(page, "._39M2dM.JB4AMj", "Enter");
+        await page.click("._39M2dM.JB4AMj > input[type='text']");
+        await page.type("._39M2dM.JB4AMj > input[type='text']", email);
+        await sendSpecialCharacter(page, "._39M2dM.JB4AMj > input[type='text']", "Enter");
 
         // enter password and hit enter
-        await page.waitForSelector("._2zrpKA._2rqcw-._3v41xv._1dBPDZ");
-        await page.type("#ap_password", pass);
-        await sendSpecialCharacter(page, "_2zrpKA._2rqcw-._2VUCMV._1dBPDZ", "Enter");
+        await page.waitForSelector("._39M2dM.JB4AMj > input[type='password']");
+        await page.type("._39M2dM.JB4AMj > input[type='password']", pass);
+        await sendSpecialCharacter(page, "._39M2dM.JB4AMj > input[type='password']", "Enter");
 
         await page.waitForNavigation();
         // go to the product page
