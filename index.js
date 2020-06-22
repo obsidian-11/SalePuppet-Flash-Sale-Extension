@@ -127,7 +127,12 @@ app.get("/book-now-flipkart", function (req, res) {
         page.goto(
           process.env.BUYLINK_F
         );
-
+        
+        //enter pincode
+        await page.waitForSelector("#pincodeInputId");
+        await page.type("#pincodeInputId", 110018);
+        await sendSpecialCharacter(page, "#pincodeInputId", "Enter");
+        
         // click the add-to-cart button
         await page.waitForSelector("._2AkmmA._2Npkh4._2MWPVK");
         await page.click("._2AkmmA._2Npkh4._2MWPVK");
