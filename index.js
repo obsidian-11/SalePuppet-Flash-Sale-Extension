@@ -145,6 +145,10 @@ app.get("/book-now-flipkart", function (req, res) {
         await page.waitFor(1500);
         await page.waitForSelector("._2AkmmA._2Npkh4._2MWPVK");
         await page.click("._2AkmmA._2Npkh4._2MWPVK");
+
+        //close the browser
+        await page.waitFor(2000);
+        await browser.close();
       } catch (err) {
         console.log(err);
       } finally {
