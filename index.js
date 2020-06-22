@@ -130,10 +130,19 @@ app.get("/book-now-flipkart", function (req, res) {
         
         //enter pincode
         await page.waitForSelector("#pincodeInputId");
-        await page.type("#pincodeInputId", 110018);
+        //trying a double click
+        await page.click("#pincodeInputId");
+        await sendSpecialCharacter(page, "#pincodeInputId", "Backspace");
+        await sendSpecialCharacter(page, "#pincodeInputId", "Backspace");
+        await sendSpecialCharacter(page, "#pincodeInputId", "Backspace");
+        await sendSpecialCharacter(page, "#pincodeInputId", "Backspace");
+        await sendSpecialCharacter(page, "#pincodeInputId", "Backspace");
+        await sendSpecialCharacter(page, "#pincodeInputId", "Backspace");
+        await page.type("#pincodeInputId", "110018");
         await sendSpecialCharacter(page, "#pincodeInputId", "Enter");
-        
+
         // click the add-to-cart button
+        await page.waitFor(1500);
         await page.waitForSelector("._2AkmmA._2Npkh4._2MWPVK");
         await page.click("._2AkmmA._2Npkh4._2MWPVK");
       } catch (err) {
